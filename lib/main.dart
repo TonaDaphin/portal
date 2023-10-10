@@ -1,8 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:requests_portal/login.dart';
 import 'package:requests_portal/signup.dart';
+import 'package:requests_portal/test.dart';
 
-void main() {
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  // addTask(name: ' kankwamnzi tona');
   runApp(const MyApp());
 }
 
@@ -30,6 +35,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // addTask(name: ' kankwamnzi tona');
     return Scaffold(
       body: Center(
         child: Column(
@@ -50,7 +56,7 @@ class Home extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: OutlinedButton(
-                onPressed: (){
+                onPressed: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(

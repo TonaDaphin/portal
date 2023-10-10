@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "464798232105",
+    "project_id": "request-portal-385ae",
+    "storage_bucket": "request-portal-385ae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:464798232105:android:54e5b8354659429b16f638",
+        "android_client_info": {
+          "package_name": "com.example.requests_portal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3bKgu-uNLIEzlvOHwKB1uri8Lw4FmHrI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
