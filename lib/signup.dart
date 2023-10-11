@@ -1,10 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:requests_portal/requests_list_page.dart';
 
 import 'login.dart';
 
 class SignUpPage extends StatelessWidget {
-  const SignUpPage({super.key});
+  SignUpPage({super.key});
+
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final roleController = TextEditingController();
+  final codeController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,14 +57,14 @@ class SignUpPage extends StatelessWidget {
                               children: [
                                 Flexible(
                                   child: TextFormField(
-                                    keyboardType: TextInputType.emailAddress,
+                                    controller: nameController,
                                     textInputAction: TextInputAction.next,
                                     decoration: const InputDecoration(
                                       hintText: "Full Name",
                                     ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'enterYourEmail';
+                                        return 'enter your name';
                                       }
                                       return null;
                                     },
@@ -77,6 +84,7 @@ class SignUpPage extends StatelessWidget {
                               children: [
                                 Flexible(
                                   child: TextFormField(
+                                    controller: emailController,
                                     keyboardType: TextInputType.emailAddress,
                                     textInputAction: TextInputAction.next,
                                     decoration: const InputDecoration(
@@ -104,7 +112,7 @@ class SignUpPage extends StatelessWidget {
                               children: [
                                 Flexible(
                                   child: TextFormField(
-                                    keyboardType: TextInputType.emailAddress,
+                                    controller: roleController,
                                     textInputAction: TextInputAction.next,
                                     decoration: const InputDecoration(
                                       hintText: "role",
@@ -131,10 +139,11 @@ class SignUpPage extends StatelessWidget {
                               children: [
                                 Flexible(
                                   child: TextFormField(
-                                    keyboardType: TextInputType.emailAddress,
+                                    controller: codeController,
+                                    keyboardType: TextInputType.number,
                                     textInputAction: TextInputAction.next,
                                     decoration: const InputDecoration(
-                                      hintText: "Code",
+                                      hintText: "Faculty Code",
                                     ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -156,6 +165,8 @@ class SignUpPage extends StatelessWidget {
                               children: [
                                 Flexible(
                                   child: TextFormField(
+                                    controller: passwordController,
+                                    obscureText: true,
                                     decoration: InputDecoration(
                                       hintText: "password",
                                       suffix: GestureDetector(
@@ -168,10 +179,10 @@ class SignUpPage extends StatelessWidget {
                                     ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'pleaseEnterYourPassword';
+                                        return 'please Enter YourPassword';
                                       }
                                       if (value.length < 6) {
-                                        return 'passwordShouldHaveAtleast6Characters';
+                                        return 'password Should Have Atleast 6 Characters';
                                       }
                                       return null;
                                     },
@@ -184,12 +195,43 @@ class SignUpPage extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
+                              onPressed: () async {
+                                try {
+                                  await FirebaseAuth.instance
+                                      .createUserWithEmailAndPassword(
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                  );
+                                  // Successfully signed up
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            const RequestsListPage()));
+                                      builder: (context) =>
+                                          const RequestsListPage(),
+                                    ),
+                                  );
+                                } on FirebaseAuthException catch (e) {
+                                  if (e.code == 'weak-password') {
+                                    // Inform the user about password requirements (e.g., a stronger password is needed).
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            'The password is too weak. It should have at least 6 characters.'),
+                                      ),
+                                    );
+                                  } else if (e.code == 'email-already-in-use') {
+                                    // Inform the user that the email is already associated with an account.
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            'An account already exists for this email.'),
+                                      ),
+                                    );
+                                  }
+                                } catch (e) {
+                                  // Handle other exceptions here
+                                  print(e);
+                                }
                               },
                               child: const Text('continue'),
                             ),
@@ -200,7 +242,7 @@ class SignUpPage extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const LoginPage()));
+                                      builder: (context) => LoginPage()));
                             },
                             child: const Text('Login'),
                           ),

@@ -1,10 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:requests_portal/requests_list_page.dart';
 import 'package:requests_portal/signup.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  LoginPage({super.key});
 
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +52,7 @@ class LoginPage extends StatelessWidget {
                               children: [
                                 Flexible(
                                   child: TextFormField(
+                                    controller: emailController,
                                     keyboardType: TextInputType.emailAddress,
                                     textInputAction: TextInputAction.next,
                                     decoration: const InputDecoration(
@@ -56,7 +60,7 @@ class LoginPage extends StatelessWidget {
                                     ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'enterYourEmail';
+                                        return 'enter Your Email';
                                       }
                                       return null;
                                     },
@@ -71,6 +75,7 @@ class LoginPage extends StatelessWidget {
                               children: [
                                 Flexible(
                                   child: TextFormField(
+                                    controller: passwordController,
                                     decoration: InputDecoration(
                                       hintText: "password",
                                       suffix: GestureDetector(
@@ -83,10 +88,10 @@ class LoginPage extends StatelessWidget {
                                     ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'pleaseEnterYourPassword';
+                                        return 'please Enter Your Password';
                                       }
                                       if (value.length < 6) {
-                                        return 'passwordShouldHaveAtleast6Characters';
+                                        return 'password Should Have Atleast 6 Characters';
                                       }
                                       return null;
                                     },
@@ -99,24 +104,58 @@ class LoginPage extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
+                              onPressed: () async {
+                                try {
+                                  await FirebaseAuth.instance
+                                      .signInWithEmailAndPassword(
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                  );
+                                  // Successfully logged in
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            const RequestsListPage()));
+                                      builder: (context) =>
+                                          const RequestsListPage(),
+                                    ),
+                                  );
+                                } on FirebaseAuthException catch (e) {
+                                  if (e.code == 'user-not-found') {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            'No user found for that email.'),
+                                      ),
+                                    );
+                                  } else if (e.code == 'wrong-password') {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            'Wrong password provided for that user.'),
+                                      ),
+                                    );
+
+                                    // Handle the incorrect password scenario here (e.g., show an error message).
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Wrong credentials'),
+                                      ),
+                                    );
+                                  }
+                                }
                               },
                               child: const Text('continue'),
                             ),
                           ),
                           const SizedBox(height: 32),
                           TextButton(
-                            onPressed: (){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SignUpPage()));
-                },
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SignUpPage()));
+                            },
                             child: const Text('Create an account'),
                           ),
                         ]),

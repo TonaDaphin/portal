@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:requests_portal/test.dart';
 
 import 'requests_list_page.dart';
 
 class FileRequestPage extends StatelessWidget {
-  const FileRequestPage({super.key});
+  FileRequestPage({super.key});
+
+  final categoryController = TextEditingController();
+  final facultyController = TextEditingController();
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +28,9 @@ class FileRequestPage extends StatelessWidget {
                   const Text(
                     "REQUEST PORTAL",
                     style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                    ),
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromARGB(255, 166, 18, 31)),
                   ),
                   const SizedBox(height: 15),
                   const Text(
@@ -49,14 +55,14 @@ class FileRequestPage extends StatelessWidget {
                               children: [
                                 Flexible(
                                   child: TextFormField(
-                                    keyboardType: TextInputType.emailAddress,
+                                    controller: categoryController,
                                     textInputAction: TextInputAction.next,
                                     decoration: const InputDecoration(
                                       hintText: "Category",
                                     ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'enterYourEmail';
+                                        return 'enter category';
                                       }
                                       return null;
                                     },
@@ -76,14 +82,14 @@ class FileRequestPage extends StatelessWidget {
                               children: [
                                 Flexible(
                                   child: TextFormField(
-                                    keyboardType: TextInputType.emailAddress,
+                                    controller: facultyController,
                                     textInputAction: TextInputAction.next,
                                     decoration: const InputDecoration(
                                       hintText: "faculty",
                                     ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'enterYourEmail';
+                                        return 'enter faculty member';
                                       }
                                       return null;
                                     },
@@ -103,14 +109,14 @@ class FileRequestPage extends StatelessWidget {
                               children: [
                                 Flexible(
                                   child: TextFormField(
-                                    keyboardType: TextInputType.emailAddress,
+                                    controller: titleController,
                                     textInputAction: TextInputAction.next,
                                     decoration: const InputDecoration(
                                       hintText: "title",
                                     ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'enterYourRole';
+                                        return 'enter title';
                                       }
                                       return null;
                                     },
@@ -130,6 +136,7 @@ class FileRequestPage extends StatelessWidget {
                               children: [
                                 Flexible(
                                   child: TextFormField(
+                                    controller: descriptionController,
                                     maxLines: 4,
                                     textInputAction: TextInputAction.next,
                                     decoration: const InputDecoration(
@@ -137,7 +144,7 @@ class FileRequestPage extends StatelessWidget {
                                     ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'enterYourFacultyCode';
+                                        return 'description';
                                       }
                                       return null;
                                     },
@@ -151,6 +158,12 @@ class FileRequestPage extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: ElevatedButton(
                               onPressed: () {
+                                addRequest(
+                                    category: categoryController.text,
+                                    faculty: facultyController.text,
+                                    title: titleController.text,
+                                    description: descriptionController.text,
+                                    sender: "manyobwa");
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

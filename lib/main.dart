@@ -35,7 +35,6 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // addTask(name: ' kankwamnzi tona');
     return Scaffold(
       body: Center(
         child: Column(
@@ -57,16 +56,14 @@ class Home extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: OutlinedButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SignUpPage()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginPage()));
                 },
                 style: const ButtonStyle(),
                 child: const Text(
-                  'Student',
+                  'Login',
                   style: TextStyle(
-                    color: Color(0x00a6121f),
+                    color: Color.fromARGB(255, 166, 18, 31),
                   ),
                 ),
               ),
@@ -78,13 +75,14 @@ class Home extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginPage()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SignUpPage()));
                 },
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                        const Color.fromARGB(255, 166, 18, 31))),
                 child: const Text(
-                  'Faculty',
+                  'SignUp',
                   style: TextStyle(
                     color: Colors.white,
                   ),
