@@ -76,6 +76,7 @@ class LoginPage extends StatelessWidget {
                                 Flexible(
                                   child: TextFormField(
                                     controller: passwordController,
+                                    obscureText: true,
                                     decoration: InputDecoration(
                                       hintText: "password",
                                       suffix: GestureDetector(
@@ -129,6 +130,7 @@ class LoginPage extends StatelessWidget {
                                     );
                                   } else if (e.code == 'wrong-password') {
                                     ScaffoldMessenger.of(context).showSnackBar(
+
                                       const SnackBar(
                                         content: Text(
                                             'Wrong password provided for that user.'),
